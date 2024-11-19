@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: publisher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: publisher
+  template:
+    metadata:
+      labels:
+        app: publisher
+    spec:
+      containers:
+        - name: publisher
+          image: localhost:32000/k8s_publisher:latest
+          env:
+            - name: RABBITMQ_URL
+              value: amqp://rabbitmq-service:5672
+          command: ["sh", "-c", "while true; do sleep 3600; done"]

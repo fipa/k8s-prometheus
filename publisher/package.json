@@ -1,0 +1,15 @@
+{
+  "name": "publisher",
+  "version": "1.0.0",
+  "description": "sample nodejs events publisher",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fpoblete",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.4",
+    "winston": "^3.17.0"
+  }
+}
