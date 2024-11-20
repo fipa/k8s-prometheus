@@ -37,6 +37,12 @@ k8s-apply-database:
 k8s-apply-prometheus:
 	microk8s kubectl apply -f prometheus/prometheus.yaml
 
+k8s-apply-prometheus2:
+	microk8s kubectl apply -f prometheus2/namespace.yaml
+	microk8s kubectl apply -f prometheus2/prometheus-config.yaml
+	microk8s kubectl apply -f prometheus2/prometheus-deployment.yaml
+	microk8s kubectl apply -f prometheus2/prometheus-service.yaml
+
 k8s-apply-rabbitmq:
 	microk8s kubectl apply -f rabbitmq/rabbitmq.yaml
 
