@@ -84,6 +84,7 @@ k8s-apply-prometheus:
 	microk8s helm repo update
 	microk8s kubectl apply -f prometheus/namespace.yaml
 	microk8s helm install prometheus-operator prometheus-community/kube-prometheus-stack --namespace monitoring
+	microk8s kubectl apply -f prometheus/prometheus-rules.yaml
 	
 k8s-delete-prometheus:
 	microk8s kubectl delete -f prometheus/namespace.yaml
