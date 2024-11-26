@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const REACT_APP_API_HOST='http://localhost';
-const REACT_APP_API_PORT='3000';
-
 function App() {
     const [counter, setCounter] = useState({ current: 0, updated: 0 });
 
     useEffect(() => {
         const fetchCounter = async () => {
             try {
-                const response = await axios.get(`${REACT_APP_API_HOST}:${REACT_APP_API_PORT}/counter`);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/counter`);
                 setCounter(response.data);
             } catch (error) {
                 console.error('Error fetching counter:', error);

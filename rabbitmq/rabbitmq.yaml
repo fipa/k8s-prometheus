@@ -41,6 +41,9 @@ kind: Service
 metadata:
   name: rabbitmq-service
 spec:
+  type: NodePort
+  selector:
+    app: rabbitmq
   ports:
     - name: amqp
       port: 5672
@@ -48,30 +51,4 @@ spec:
     - name: management
       port: 15672
       targetPort: 15672
-  selector:
-    app: rabbitmq
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: rabbitmq-definitions
-data:
-  definitions.json: |
-    {
-      "users": [
-        {
-          "name": "guest",
-          "password": "guest",
-          "tags": "administrator"
-        }
-      ],
-      "permissions": [
-        {
-          "user": "guest",
-          "vhost": "/",
-          "configure": ".*",
-          "write": ".*",
-          "read": ".*"
-        }
-      ]
-    }
+      nodePort: 30672

@@ -42,6 +42,10 @@ docker-build-front:
 	docker build -t localhost:32000/k8s_front:latest front
 	docker push localhost:32000/k8s_front:latest
 
+docker-build-process:
+	docker build -t localhost:32000/k8s_process:latest process
+	docker push localhost:32000/k8s_process:latest
+
 docker-build-publisher:
 	docker build -t localhost:32000/k8s_publisher:latest publisher
 	docker push localhost:32000/k8s_publisher:latest
@@ -51,12 +55,18 @@ docker-build-publisher:
 
 k8s-apply-api:
 	microk8s kubectl apply -f api/api.yaml
+	microk8s kubectl apply -f api/api-service.yaml
 
 k8s-apply-consumer:
 	microk8s kubectl apply -f consumer/consumer.yaml
 
 k8s-apply-front:
 	microk8s kubectl apply -f front/front.yaml
+	microk8s kubectl apply -f front/front-configMap.yaml
+	microk8s kubectl apply -f front/front-service.yaml
+
+k8s-apply-process:
+	microk8s kubectl apply -f process/process.yaml
 
 k8s-apply-publisher:
 	microk8s kubectl apply -f publisher/publisher.yaml
@@ -73,11 +83,25 @@ k8s-apply-prometheus:
 	microk8s helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	microk8s helm repo update
 	microk8s kubectl apply -f prometheus/namespace.yaml
-	microk8s helm install prometheus-operator prometheus-community/kube-prometheus-stack --namespace monitoring -f prometheus/values.yaml
+	microk8s helm install prometheus-operator prometheus-community/kube-prometheus-stack --namespace monitoring
 	
-
 k8s-delete-prometheus:
 	microk8s kubectl delete -f prometheus/namespace.yaml
+
+k8s-restart-api:
+	microk8s kubectl rollout restart deployment api
+
+k8s-restart-consumer:
+	microk8s kubectl rollout restart deployment consumer
+
+k8s-restart-front:
+	microk8s kubectl rollout restart deployment frontend
+
+k8s-restart-publisher:
+	microk8s kubectl rollout restart deployment publisher
+
+k8s-restart-database:
+	microk8s kubectl rollout restart deployment postgres
 
 # Run dashboard, in a separate terminal
 k8s-dashboard:

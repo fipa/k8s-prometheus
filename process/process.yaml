@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-sample-process
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-sample-process
+  template:
+    metadata:
+      labels:
+        app: nodejs-sample-process
+    spec:
+      containers:
+      - name: nodejs-sample-process
+        image: localhost:32000/k8s_process:latest
