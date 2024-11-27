@@ -83,7 +83,7 @@ k8s-apply-prometheus:
 	microk8s helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	microk8s helm repo update
 	microk8s kubectl apply -f prometheus/namespace.yaml
-	microk8s helm install prometheus-operator prometheus-community/kube-prometheus-stack --namespace monitoring
+	microk8s helm install prometheus-operator prometheus-community/kube-prometheus-stack --namespace monitoring -f prometheus/custom-values.yaml
 	microk8s kubectl apply -f prometheus/prometheus-rules.yaml
 	
 k8s-delete-prometheus:

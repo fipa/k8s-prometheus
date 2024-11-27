@@ -21,6 +21,11 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/', (req, res) => {
+    console.log('Hello World');
+    res.status(200).send('Hello World');
+});
+
 app.get('/counter', async (req, res) => {
     try {
         const client = await db.connect();
