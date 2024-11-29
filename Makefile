@@ -16,6 +16,7 @@ k8s-init:
 	microk8s enable registry
 	microk8s enable rbac
 	microk8s enable dashboard
+	microk8s enable csi
 
 docker-build-all: docker-build-api docker-build-consumer docker-build-front docker-build-publisher
 
@@ -78,15 +79,29 @@ k8s-apply-rabbitmq:
 	microk8s kubectl apply -f rabbitmq/rabbitmq.yaml
 
 
-# Prometheus
+k8s-enable-azureblob:
+	microk8s helm repo add blob-csi-driver https://raw.githubusercontent.com/kubernetes-sigs/blob-csi-driver/master/charts
+	microk8s helm repo update
+	microk8s helm install blob-csi-driver blob-csi-driver/blob-csi-driver --set node.enableBlobfuseProxy=true --set controller.replicas=1 --namespace kube-system --version v1.25.0
+
+k8s-apply-storage:
+	microk8s kubectl apply -f prometheus/namespace.yaml
+	microk8s kubectl -n monitoring create secret generic azure_credentials --from-file=azure_credentials.yaml=storage/azure_credentials.yaml
+	microk8s kubectl apply -f storage/azure-blob-storageclass.yaml
+	microk8s kubectl apply -f storage/azure-blob-pv.yaml
+
 k8s-apply-prometheus:
 	microk8s helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	microk8s helm repo update
-	microk8s kubectl apply -f prometheus/namespace.yaml
 	microk8s helm install prometheus-operator prometheus-community/kube-prometheus-stack --namespace monitoring -f prometheus/custom-values.yaml
-	microk8s kubectl apply -f prometheus/prometheus-rules.yaml
-	
+	microk8s kubectl apply -f prometheus/alerts.yaml
+
+k8s-apply-thanos:
+	microk8s helm repo add bitnami https://charts.bitnami.com/bitnami
+	microk8s helm install thanos bitnami/thanos -n monitoring
+
 k8s-delete-prometheus:
+ 	#microk8s helm uninstall prometheus-operator --namespace monitoring
 	microk8s kubectl delete -f prometheus/namespace.yaml
 
 k8s-restart-api:

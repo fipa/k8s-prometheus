@@ -1,0 +1,16 @@
+# azure-blob-storageclass.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: azureblob
+provisioner: blob.csi.azure.com
+parameters:
+  containerName: metrics
+  storageAccount: fernandostorage
+  resourceGroup: SMA-VPN
+  location: eastus
+  skuName: Standard_LRS
+  secretName: azure-storage-secret
+  secretNamespace: monitoring
+reclaimPolicy: Retain
+volumeBindingMode: Immediate

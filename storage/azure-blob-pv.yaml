@@ -1,0 +1,22 @@
+# azure-blob-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: azureblob-pv
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: azureblob
+  csi:
+    driver: blob.csi.azure.com
+    volumeHandle: azureblob-metrics-pv
+    readOnly: false
+    volumeAttributes:
+      containerName: metrics
+      storageAccount: fernandostorage
+      resourceGroup: SMA-VPN
+      location: eastus
+      skuName: Standard_LRS
